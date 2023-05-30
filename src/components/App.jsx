@@ -28,6 +28,19 @@ export class App extends Component {
     filter: '',
   };
 
+  componentDidMount() {
+    const contactsLS = JSON.parse(localStorage.getItem('contacts'));
+    if (contactsLS) {
+      this.setState({ contacts: contactsLS });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.contacts !== prevState.contacts) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+  }
+
   addContact = newContact => {
     const existing = this.state.contacts.find(
       ({ name, number }) =>
@@ -68,19 +81,6 @@ export class App extends Component {
       contact.name.toLowerCase().includes(normalizedFilter)
     );
   };
-
-  componentDidMount() {
-    const contactsLS = JSON.parse(localStorage.getItem('contacts'));
-    if (contactsLS) {
-      this.setState({ contacts: contactsLS });
-    }
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (this.state.contacts !== prevState.contacts) {
-      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
-    }
-  }
 
   render() {
     const { filter } = this.state;
